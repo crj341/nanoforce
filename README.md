@@ -1,5 +1,19 @@
-# Nanoforce - AFM Python Analysis Tutorial
-This tutorial demonstrates the basics of the AFM python tools for data analysis. Currently the scripts are available as an offline file and can also be installed from PyPI using:
+# Nanoforce
+## Release history:
+0.0.1 - Development
+
+0.0.2 - Packaging test
+
+0.0.3 - Initial stable release
+
+0.0.4 - Added dependenices to setup (numpy, scipy, easygui, plotly)
+
+0.0.5 - Updated README and added class/function descriptions
+
+0.0.6 - Updated README
+
+# Python AFM Analysis Tutorial
+This tutorial demonstrates the basics of the AFM python tools for data analysis. Currently the scripts are available as an offline file or can be installed from PyPI using:
 ```
 pip install nanoforce
 ```
@@ -151,9 +165,25 @@ expt_1.calc_modulus()
 expt_2.calc_modulus()
 expt_3.calc_modulus()
 ```
-The method use currently follows the Hertz model for a spherical indenter.
+The method use currently follows the Hertz model for a spherical indenter:
 
-The default method uses as poisson ratio of 0.5 and indenter radius of 10 nm (10E-09). To set these manually use the 'poisson_ratio' and 'indenter_radius' inputs:
+![alt text](https://latex.codecogs.com/gif.latex?F%20%3D%20%5Cfrac%7B4%7D%7B3%7D%20E%5E*%20R%5E%7B0.5%7D%20d%5E%7B1.5%7D)
+
+![alt text](https://latex.codecogs.com/gif.latex?%5Cfrac%7B1%7D%7BE%5E*%7D%20%3D%20%5Cfrac%7B1-%5Cnu%5E2_1%7D%7BE_1%7D%20&plus;%20%5Cfrac%7B1-%5Cnu%5E2_2%7D%7BE_2%7D)
+
+Where:
+![alt text](https://latex.codecogs.com/gif.latex?F) is Applied Force (nN)
+![alt text](https://latex.codecogs.com/gif.latex?E%5E*) is Reduced Modulus (MPa)
+![alt text](https://latex.codecogs.com/gif.latex?R) is Sphere Radius (nm)
+![alt text](https://latex.codecogs.com/gif.latex?d) is Total Deformation (i.e. indentation depth) (nm)
+![alt text](https://latex.codecogs.com/gif.latex?E_1) is Indenter elastic modulus (MPa)
+![alt text](https://latex.codecogs.com/gif.latex?E_2) is Sample elastic modulus (MPa)
+![alt text](https://latex.codecogs.com/gif.latex?%5Cnu_1) is Indenter Poisson Ratio
+![alt text](https://latex.codecogs.com/gif.latex?%5Cnu_2) is Sample Poisson Ratio
+
+The method assumes a hard indenter is used, i.e. ![alt text](https://latex.codecogs.com/gif.latex?%5Cfrac%7B1-%5Cnu%5E2_1%7D%7BE_1%7D%20%5Cll%20%5Cfrac%7B1-%5Cnu%5E2_2%7D%7BE_2%7D)
+
+The default method uses as poisson ratio of 0.5 and indenter radius of 10 nm (input required in m, i.e. 10E-09). To set these manually use the 'poisson_ratio' and 'indenter_radius' inputs:
 ```
 expt_1.calc_modulus(poisson_ratio = 0.4, indenter_radius = 20 * 10e-9)
 ```
