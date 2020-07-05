@@ -20,7 +20,9 @@ This tutorial demonstrates the basics of the AFM python tools for data analysis.
 ```
 pip install nanoforce
 ```
-Following the steps below will show you how to carry out simple analysis and plotting of AFM data produced with Nanoscope and explain how to carryout your own more specific analysis. For each snippet of code - try running it to see what it outputs.
+Following the steps below will show you how to carry out simple analysis and plotting of AFM data produced with Nanoscope and explain how to carryout your own more specific analysis. For each snippet of code - try running it to see what it outputs. You can download the tutorial as a Jupyter notebook from:
+https://github.com/crj341/nanoforce/blob/master/AFM_tutorial.ipynb
+
 ## Prerequisites
 To use the tools you will need a few python packages (numpy, plotly, scipy and easygui). To install these type the following commands into a terminal window (unless you have installed the nanoforce package from PyPI, in which case they should have installed automatically):
 ```
