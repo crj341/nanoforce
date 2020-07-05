@@ -1,4 +1,7 @@
 # Nanoforce
+
+Package to import and analyse AFM force curves produced using Nanoscope 6
+
 ## Release history:
 0.0.1 - Development
 
