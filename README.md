@@ -172,13 +172,21 @@ The method use currently follows the Hertz model for a spherical indenter:
 ![alt text](https://latex.codecogs.com/gif.latex?%5Cfrac%7B1%7D%7BE%5E*%7D%20%3D%20%5Cfrac%7B1-%5Cnu%5E2_1%7D%7BE_1%7D%20&plus;%20%5Cfrac%7B1-%5Cnu%5E2_2%7D%7BE_2%7D)
 
 Where:
+
 ![alt text](https://latex.codecogs.com/gif.latex?F) is Applied Force (nN)
+
 ![alt text](https://latex.codecogs.com/gif.latex?E%5E*) is Reduced Modulus (MPa)
+
 ![alt text](https://latex.codecogs.com/gif.latex?R) is Sphere Radius (nm)
+
 ![alt text](https://latex.codecogs.com/gif.latex?d) is Total Deformation (i.e. indentation depth) (nm)
+
 ![alt text](https://latex.codecogs.com/gif.latex?E_1) is Indenter elastic modulus (MPa)
+
 ![alt text](https://latex.codecogs.com/gif.latex?E_2) is Sample elastic modulus (MPa)
+
 ![alt text](https://latex.codecogs.com/gif.latex?%5Cnu_1) is Indenter Poisson Ratio
+
 ![alt text](https://latex.codecogs.com/gif.latex?%5Cnu_2) is Sample Poisson Ratio
 
 The method assumes a hard indenter is used, i.e. ![alt text](https://latex.codecogs.com/gif.latex?%5Cfrac%7B1-%5Cnu%5E2_1%7D%7BE_1%7D%20%5Cll%20%5Cfrac%7B1-%5Cnu%5E2_2%7D%7BE_2%7D)
