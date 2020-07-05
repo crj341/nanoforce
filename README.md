@@ -304,62 +304,8 @@ fig.update_layout(
 fig.show()
 ```
 ## Example analysis script
-Finally, below is an example script to carry out the above analysis for 3 experiments:
-```
-from  nanoforce   import  AFM
+An example analysis script is available from Git Hub:
+https://github.com/crj341/nanoforce/blob/master/afm_analysis.py
 
-expt_1 = AFM()
-expt_2 = AFM()
-expt_3 = AFM()
-
-expt_1.set_run_name('Sample 1')
-expt_2.set_run_name('Sample 2')
-expt_3.set_run_name('Sample 3')
-
-expt_1.input_files()
-expt_2.input_files()
-expt_3.input_files()
-
-expt_1.nanoscope_params()
-expt_2.nanoscope_params()
-expt_3.nanoscope_params()
-
-expt_1.set_def_sens(100)
-expt_2.set_def_sens(100)
-expt_3.set_def_sens(100)
-
-expt_1.set_spr_const(0.32)
-expt_2.set_spr_const(0.32)
-expt_3.set_spr_const(0.32)
-
-expt_1.nanoscope_read()
-expt_2.nanoscope_read()
-expt_3.nanoscope_read()
-
-expt_1.baseline()
-expt_2.baseline()
-expt_3.baseline()
-
-expt_1.contact()
-expt_2.contact()
-expt_3.contact()
-
-expt_1.plot_curves()
-expt_2.plot_curves()
-expt_3.plot_curves()
-
-expt_1.calc_adhesion()
-expt_2.calc_adhesion()
-expt_3.calc_adhesion()
-
-expt_1.calc_modulus()
-expt_2.calc_modulus()
-expt_3.calc_modulus()
-
-expt_1.save_data()
-expt_2.save_data()
-expt_3.save_data()
-
-AFM.overlay_adhesion_hist(expt_1,expt_2,expt_3)
-AFM.overlay_modulus_bar(expt_1,expt_2,expt_3)
-```
+A script is also available here to apply a clustering algorithm to identify groups of corresponding adhesion and modulus values, while removing noise:
+https://github.com/crj341/nanoforce/blob/master/afm_clustering.py
