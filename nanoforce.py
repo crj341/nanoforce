@@ -7,14 +7,6 @@
 # Date      : 26/06/2020
 # Version   : 0.1
 
-# Prerequisits:
-#   pip install numpy
-#   pip install plotly
-#   pip install scipy
-#   pip install easygui
-
-# For instructions, view AFM_tutorial.ipynb Jupyter notebook
-
 import  numpy                   as      np
 import  plotly.graph_objects    as      go
 import  easygui                 as      gui
@@ -24,11 +16,173 @@ import  os
 
 class AFM:
 
+    '''
+    The nanofoce.AFM() class is used for importing, storing and analysing AFM
+    force curves produced by Nanoscope 6. Details of the parameters, functions
+    and an example running script are given below.
+
+    Prerequisits
+    ------------
+    pip install numpy
+    pip install plotly
+    pip install scipy
+    pip install easygui
+
+    Parameters
+    ----------  
+    approach_raw: [samples, curve_number]
+        Raw AFM force curve approach data (nN) imported from nanoscope
+        files without baseline or contact corrections applied, produced
+        by input_files function
+    retract_raw: [samples, curve_number]
+        Raw AFM force curve retract data (nN) imported from nanoscope
+        files without baseline or contact corrections applied, produced
+        by input_files function
+    z_position_raw: [samples, curve_number]
+        Raw AFM force curve tip position data (nm) imported from nanoscope
+        files without baseline or contact corrections applied, produced
+        by input_files function
+    approach: [samples, curve_number]
+        AFM force curve approach data (nN) produced by the baseline function
+        and updated by teh contact function
+    retract: [samples, curve_number]
+        AFM force curve retract data (nN) produced by the baseline function
+        and updated by teh contact function
+    z_position:[samples, curve_number]
+        AFM force curve tip position data (nm) produced by the baseline
+        function and updated by teh contact function
+    adhesion: [curve_number]
+        Adhesion (nN) value calculated for each force curve by calc_adhesion
+    modulus: [curve_number]
+        Modulus (MPa) value calculated for each force curve by calc_modulus
+    def_sens:
+        Deflection sensetivity (nm/V), imported manually from first force
+        curve file and manually overriden with set_def_sense function
+    spr_const:
+        Spring constant (N/m), imported manually from first force
+        curve file and manually overriden with set_def_sense function
+    file_name:
+        First file name (usually with .000 extension)
+    filelist: [curve_number]
+        Full list of imported file names (.000 to .n extension)
+    run_name:
+        Name of experiment, specified by set_run_name function
+
+    Functions
+    ---------
+    set_run_name:
+        Manually set 'run_name' variable <.set_run_name(Sample name here)>
+    set_def_sens:
+        Manually set 'def_sens' variable <.set_def_sens(Value)>
+    set_spr_const:
+        Manually set 'spr_const' variable <.set_spr_const(Value)>
+    run:
+        Basic run script calling:
+            .input_files()
+            .nanoscope_params()
+            .nanoscope_read()
+            .baseline()
+            .contact()
+            .plot_curves()
+            .calc_adhesion()
+            .calc_modulus()
+    input_files:
+        Function to find input file names. If called with no inputs a GUI
+        window will appear prompting the user to select the first Nanoscope
+        file (usually with '.000' extension). Alternativley the file path can
+        be given as an input to the function <.input_files(\path\to\file\.000)>.
+        The function will then search for all subsequent files with the same
+        name and consecutive file extensions (.000, .001, .002, ..., .nnn)
+    nanoscope_params:
+        Function to extract relevant parameters from first Nanoscope file
+    nanoscope_read:
+        Function to import raw force curve data
+    plot_raw:
+        Function to plot individual, unprocessed force curves. Curve number to
+        plot must be given as an input <.plot_raw(n)>
+    baseline:
+        Function to adjust force curve baseline to zero by taking the mean value
+        of a specified region of the approach curve. The default is from 0.45*z
+        to 0.8*z, starting at the contact side of the curve. The start and end
+        points may be specified using the 'start_pos' and 'end_pos' inputs to
+        account for a longer/shorter baseline or regions of noise. Noisy curves
+        may be removed by specifying a maximum standard deviation for the baseline
+        region separatley for the approach and retract curves using the inputs
+        'max_approach_noise' and 'max_retract_noise' respectivley. The defaults for
+        each are 1 nN.
+    contact:
+        Function to align the contact point of the approach curve with zero by
+        finding the first point to cross the axis and interpolating between this
+        and the previous value. Note this method may be unstable for noisy curves.
+    plot_adjusted:
+        Function to plot individual, processed force curves. Curve number to
+        plot must be given as an input <.plot_adjusted(n)>
+    plot_curves:
+        Function to plot all processed force curves
+    delete_curve:
+        Function to manually remove erroneous or highly noisy curves. Specify the
+        curve(s) to remove in the input <.delete_curve(i,j,k)>
+    save_data:
+        Function to save current variables in '.npz' format. The file name and path
+        for saving can be given as an input. If no input is given a GUI will prompt
+        the user to select a location and file name. In both case no file extension
+        is needed.
+    load_data:
+        Function to import previously saved variables in '.npz' format. As with saving,
+        the file name and path can be given as an input or left blank to use a GUI.
+    calc_adhesion:
+        Funciton to calculate the adhesion value for each curve by finding the minimum
+        point on the retact curve. A histogram of calculated values can be plotted by
+        setting the 'plot_hist' input to 'True'
+    overlay_adhesion_hist:
+        Funciton to plot a histogram comparing adhesion values for multiple experiments.
+        A separate instance of the AFM class containing the data for each should be
+        given as the inputs
+    overlay_adhesion_box:
+        Funciton to produce a box plot comparing adhesion values for multiple experiments.
+        A separate instance of the AFM class containing the data for each should be
+        given as the inputs
+    overlay_adhesion_bar:
+        Funciton to produce a bar chart comparing adhesion values for multiple experiments.
+        A separate instance of the AFM class containing the data for each should be
+        given as the inputs
+    calc_modulus:
+        Funciton to calculate the modulus value for each curve using the Hertz model.
+        A histogram of calculated values can be plotted by setting the 'plot_hist'
+        input to 'True'
+    overlay_modulus_hist:
+        Funciton to plot a histogram comparing modulus values for multiple experiments.
+        A separate instance of the AFM class containing the data for each should be
+        given as the inputs
+    overlay_modulus_box:
+        Funciton to produce a box plot comparing modulus values for multiple experiments.
+        A separate instance of the AFM class containing the data for each should be
+        given as the inputs
+    overlay_modulus_bar:
+        Funciton to produce a bar chart comparing modulus values for multiple experiments.
+        A separate instance of the AFM class containing the data for each should be
+        given as the inputs
+    plot_adhesion_modulus:
+        Function to produce a scatter plot of adhesion vs. modulus values for a single
+        experiment
+
+    Example
+    -------
+    An example script and full tutorial for using the AFM class is available from:
+    https://github.com/crj341/nanoforce
+
+    '''
+
     def __init__(self):
 
         self.approach = []
         self.retract = []
         self.z_position = []
+
+        self.approach_raw = []
+        self.retract_raw = []
+        self.z_position_raw = []
+
         self.adhesion = []
         self.modulus = []
 
@@ -42,19 +196,40 @@ class AFM:
         self.spr_const = []
 
         self.file_name = []
+        self.filelist = []
         self.run_name = []
 
 
     def set_run_name(self,_run_name):
+        '''
+        Manually set 'run_name' variable <.set_run_name(Sample name here)>
+        '''
         self.run_name = str(_run_name)
 
     def set_def_sens(self,_def_sens):
+        '''
+        Manually set 'def_sens' variable <.set_def_sens(Value)>
+        '''
         self.def_sens = _def_sens
 
     def set_spr_const(self,_spr_const):
+        '''
+        Manually set 'spr_const' variable <.set_spr_const(Value)>
+        '''
         self.spr_const = _spr_const
 
     def run(self):
+        '''
+        Basic run script calling:
+            .input_files()
+            .nanoscope_params()
+            .nanoscope_read()
+            .baseline()
+            .contact()
+            .plot_curves()
+            .calc_adhesion()
+            .calc_modulus()
+        '''
 
         self.input_files()
         self.nanoscope_params()
@@ -69,6 +244,14 @@ class AFM:
         self,
         gui_on = True
     ):
+        '''
+        Function to find input file names. If called with no inputs a GUI
+        window will appear prompting the user to select the first Nanoscope
+        file (usually with '.000' extension). Alternativley the file path can
+        be given as an input to the function <.input_files(\path\to\file\.000)>.
+        The function will then search for all subsequent files with the same
+        name and consecutive file extensions (.000, .001, .002, ..., .nnn)
+        '''
 
         if gui_on:
             file = gui.fileopenbox()
@@ -104,6 +287,9 @@ class AFM:
         
 
     def nanoscope_params(self):
+        '''
+        Function to extract relevant parameters from first Nanoscope file
+        '''
 
         filename = self.filelist[0]
         data = open(filename,"r")
@@ -158,6 +344,9 @@ class AFM:
         self.spr_const = float(_spr_const)
 
     def nanoscope_read(self):
+        '''
+        Function to import raw force curve data
+        '''
 
         i = 0
 
@@ -186,6 +375,10 @@ class AFM:
         self,
         curve_number = 1
     ):
+        '''
+        Function to plot individual, unprocessed force curves. Curve number to
+        plot must be given as an input <.plot_raw(n)>
+        '''
         fig = go.Figure()
         fig.add_trace(go.Scatter(y = self.approach_raw[:,curve_number], x = self.z_position_raw[:,curve_number], mode='lines', name = 'Approach curve (raw)'))
         fig.add_trace(go.Scatter(y = self.retract_raw[:,curve_number], x = self.z_position_raw[:,curve_number], mode='lines', name = 'Retract curve (raw)'))
@@ -202,6 +395,17 @@ class AFM:
         max_approach_noise = 1,
         max_retract_noise = 1
     ):
+        '''
+        Function to adjust force curve baseline to zero by taking the mean value
+        of a specified region of the approach curve. The default is from 0.45*z
+        to 0.8*z, starting at the contact side of the curve. The start and end
+        points may be specified using the 'start_pos' and 'end_pos' inputs to
+        account for a longer/shorter baseline or regions of noise. Noisy curves
+        may be removed by specifying a maximum standard deviation for the baseline
+        region separatley for the approach and retract curves using the inputs
+        'max_approach_noise' and 'max_retract_noise' respectivley. The defaults for
+        each are 1 nN.
+        '''
         self.approach = np.zeros([self.samps_line, len(self.filelist)])
         self.retract = np.zeros([self.samps_line, len(self.filelist)])
         self.z_position = np.zeros([self.samps_line, len(self.filelist)])
@@ -242,6 +446,11 @@ class AFM:
         self.z_position = self.z_position[:,:i]
 
     def contact(self):
+        '''
+        Function to align the contact point of the approach curve with zero by
+        finding the first point to cross the axis and interpolating between this
+        and the previous value. Note this method may be unstable for noisy curves.
+        '''
         
         for i in range(0, self.z_position.shape[1]):
             _approach = self.approach[:,i]
@@ -266,6 +475,10 @@ class AFM:
         self,
         curve_number = 1
     ):
+        '''
+        Function to plot individual, processed force curves. Curve number to
+        plot must be given as an input <.plot_adjusted(n)>
+        '''
         fig = go.Figure()
         fig.add_trace(go.Scatter(y = self.approach[:,curve_number], x = self.z_position[:,curve_number], mode='lines', name = 'Approach curve'))
         fig.add_trace(go.Scatter(y = self.retract[:,curve_number], x = self.z_position[:,curve_number], mode='lines', name = 'Retract curve'))
@@ -276,8 +489,9 @@ class AFM:
         fig.show()
 
     def plot_curves(self):
-
-        # Add traces, one for each slider step
+        '''
+        Function to plot all processed force curves
+        '''
 
         trace_1 = []
         trace_2 = []
@@ -312,10 +526,10 @@ class AFM:
             step = dict(
                 method="update",
                 args=[{"visible": [False] * len(fig.data)},
-                    {"title": "Slider switched to experiment: " + str(i)}],  # layout attribute
+                    {"title": "Slider switched to experiment: " + str(i)}],
             )
             j = int(n_trace+i)
-            step["args"][0]["visible"][i] = True  # Toggle i'th trace to "visible"
+            step["args"][0]["visible"][i] = True
             step["args"][0]["visible"][j] = True
             steps.append(step)
 
@@ -333,6 +547,10 @@ class AFM:
         fig.show()
 
     def delete_curve(self,*args):
+        '''
+        Function to manually remove erroneous or highly noisy curves. Specify the
+        curve(s) to remove in the input <.delete_curve(i,j,k)>
+        '''
 
         for curve_number in args:
 
@@ -354,6 +572,11 @@ class AFM:
         self,
         filename = []
     ):
+        '''
+        Function to save current variables in '.npz' format. The file name and path
+        for saving can be given as an input. If no input is given a GUI will prompt
+        the user to select a location and file name. In both case no file extension
+        '''
         if len(filename) == 0:
             output_path = gui.filesavebox()
         else:
@@ -378,9 +601,20 @@ class AFM:
             run_name = self.run_name
         )
 
-    def load_data(self):
+    def load_data(
+        self,
+        filename = []
+    ):
+        '''
+        Function to import previously saved variables in '.npz' format. As with saving,
+        the file name and path can be given as an input or left blank to use a GUI.
+        '''
 
-        input_path = gui.fileopenbox()
+        if len(filename) == 0:
+            input_path = gui.fileopenbox()
+        else:
+            input_path = filename
+        
         data = np.load(input_path)
 
         self.approach = data['approach']
@@ -403,6 +637,11 @@ class AFM:
         self,
         plot_hist = False
     ):
+        '''
+        Funciton to calculate the adhesion value for each curve by finding the minimum
+        point on the retact curve. A histogram of calculated values can be plotted by
+        setting the 'plot_hist' input to 'True'
+        '''
 
         self.adhesion = np.zeros(self.z_position.shape[1])
 
@@ -430,6 +669,11 @@ class AFM:
         self,
         *all_adhesion
     ):
+        '''
+        Funciton to plot a histogram comparing adhesion values for multiple experiments.
+        A separate instance of the AFM class containing the data for each should be
+        given as the inputs
+        '''
         fig = go.Figure()
 
         for single in all_adhesion:
@@ -449,6 +693,11 @@ class AFM:
         self,
         *all_adhesion
     ):
+        '''
+        Funciton to produce a box plot comparing adhesion values for multiple experiments.
+        A separate instance of the AFM class containing the data for each should be
+        given as the inputs
+        '''
         fig = go.Figure()
 
         for single in all_adhesion:
@@ -466,6 +715,11 @@ class AFM:
         self,
         *all_adhesion
     ):
+        '''
+        Funciton to produce a bar chart comparing adhesion values for multiple experiments.
+        A separate instance of the AFM class containing the data for each should be
+        given as the inputs
+        '''
         fig = go.Figure()
 
         mean_adhesion = []
@@ -495,6 +749,11 @@ class AFM:
         indenter_radius = 10 * 10e-9,
         plot_hist = False
     ):
+        '''
+        Funciton to calculate the modulus value for each curve using the Hertz model.
+        A histogram of calculated values can be plotted by setting the 'plot_hist'
+        input to 'True'
+        '''
         self.modulus = np.zeros(self.z_position.shape[1])
 
         for curve_number in range(0, self.z_position.shape[1]):
@@ -537,6 +796,11 @@ class AFM:
         self,
         *all_modulus
     ):
+        '''
+        Funciton to plot a histogram comparing modulus values for multiple experiments.
+        A separate instance of the AFM class containing the data for each should be
+        given as the inputs
+        '''
         fig = go.Figure()
 
         for single in all_modulus:
@@ -556,6 +820,11 @@ class AFM:
         self,
         *all_modulus
     ):
+        '''
+        Funciton to produce a box plot comparing modulus values for multiple experiments.
+        A separate instance of the AFM class containing the data for each should be
+        given as the inputs
+        '''
         fig = go.Figure()
 
         for single in all_modulus:
@@ -573,6 +842,11 @@ class AFM:
         self,
         *all_modulus
     ):
+        '''
+        Funciton to produce a bar chart comparing modulus values for multiple experiments.
+        A separate instance of the AFM class containing the data for each should be
+        given as the inputs
+        '''
         fig = go.Figure()
         mean_modulus = []
         std_modulus= []
@@ -596,6 +870,10 @@ class AFM:
         fig.show()
 
     def plot_adhesion_modulus(self):
+        '''
+        Function to produce a scatter plot of adhesion vs. modulus values for a single
+        experiment
+        '''
         fig = go.Figure(go.Scatter(x = self.adhesion, y = self.modulus, mode='markers'))
         fig.update_layout(
                 xaxis_title_text='Adhesion (nN)',
