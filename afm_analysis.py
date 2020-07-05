@@ -7,7 +7,7 @@
 # Date      : 26/06/2020
 
 # Import AFM class
-from  afm   import  AFM
+from  nanoforce   import  AFM
 
 # Name varialbles for each experiment
 expt_1 = AFM()
