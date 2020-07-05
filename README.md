@@ -172,29 +172,29 @@ expt_3.calc_modulus()
 ```
 The method use currently follows the Hertz model for a spherical indenter:
 
-![alt text](https://latex.codecogs.com/gif.latex?F%20%3D%20%5Cfrac%7B4%7D%7B3%7D%20E%5E*%20R%5E%7B0.5%7D%20d%5E%7B1.5%7D)
+![](https://camo.githubusercontent.com/e4f11366d77786e0d6a533f4ee99ff57343515ba/68747470733a2f2f6c617465782e636f6465636f67732e636f6d2f6769662e6c617465783f46253230253344253230253543667261632537423425374425374233253744253230452535452a25323052253545253742302e3525374425323064253545253742312e35253744)
 
-![alt text](https://latex.codecogs.com/gif.latex?%5Cfrac%7B1%7D%7BE%5E*%7D%20%3D%20%5Cfrac%7B1-%5Cnu%5E2_1%7D%7BE_1%7D%20&plus;%20%5Cfrac%7B1-%5Cnu%5E2_2%7D%7BE_2%7D)
+![](https://camo.githubusercontent.com/14cef2c5e957138704ec2f3fe2d0b75c4c1dc1b7/68747470733a2f2f6c617465782e636f6465636f67732e636f6d2f6769662e6c617465783f2535436672616325374231253744253742452535452a25374425323025334425323025354366726163253742312d2535436e75253545325f31253744253742455f312537442532302b25323025354366726163253742312d2535436e75253545325f32253744253742455f32253744)
 
 Where:
 
-![alt text](https://latex.codecogs.com/gif.latex?F) is Applied Force (nN)
+![](https://camo.githubusercontent.com/8bc1794caf55a8564fe3d7d97864264621a42d42/68747470733a2f2f6c617465782e636f6465636f67732e636f6d2f6769662e6c617465783f46) is Applied Force (nN)
 
-![alt text](https://latex.codecogs.com/gif.latex?E%5E*) is Reduced Modulus (MPa)
+![](https://camo.githubusercontent.com/ff544c24651cf98efd2ff0cc886a660c98396c2d/68747470733a2f2f6c617465782e636f6465636f67732e636f6d2f6769662e6c617465783f452535452a) is Reduced Modulus (MPa)
 
-![alt text](https://latex.codecogs.com/gif.latex?R) is Sphere Radius (nm)
+![](https://camo.githubusercontent.com/c7cdc1b9a6698dd223b77822a075aa1246ce3ee1/68747470733a2f2f6c617465782e636f6465636f67732e636f6d2f6769662e6c617465783f52) is Sphere Radius (nm)
 
-![alt text](https://latex.codecogs.com/gif.latex?d) is Total Deformation (i.e. indentation depth) (nm)
+![](https://camo.githubusercontent.com/a9441c067b8389cfff3cccce033e3251a198017c/68747470733a2f2f6c617465782e636f6465636f67732e636f6d2f6769662e6c617465783f64) is Total Deformation (i.e. indentation depth) (nm)
 
-![alt text](https://latex.codecogs.com/gif.latex?E_1) is Indenter elastic modulus (MPa)
+![](https://camo.githubusercontent.com/f518919e4b9dd3fffc951cd5f7a0f4d59a47dd89/68747470733a2f2f6c617465782e636f6465636f67732e636f6d2f6769662e6c617465783f455f31) is Indenter elastic modulus (MPa)
 
-![alt text](https://latex.codecogs.com/gif.latex?E_2) is Sample elastic modulus (MPa)
+![](https://camo.githubusercontent.com/a0497118c2b189cb64abec7a2cac19dd405de497/68747470733a2f2f6c617465782e636f6465636f67732e636f6d2f6769662e6c617465783f455f32) is Sample elastic modulus (MPa)
 
-![alt text](https://latex.codecogs.com/gif.latex?%5Cnu_1) is Indenter Poisson Ratio
+![](https://camo.githubusercontent.com/c69ec83ba78d57af69c54499f1b81ab1fce8a871/68747470733a2f2f6c617465782e636f6465636f67732e636f6d2f6769662e6c617465783f2535436e755f31) is Indenter Poisson Ratio
 
-![alt text](https://latex.codecogs.com/gif.latex?%5Cnu_2) is Sample Poisson Ratio
+![](https://camo.githubusercontent.com/452114f60b359b5dd1a5e252aee4a9d39f1bf10c/68747470733a2f2f6c617465782e636f6465636f67732e636f6d2f6769662e6c617465783f2535436e755f32) is Sample Poisson Ratio
 
-The method assumes a hard indenter is used, i.e. ![alt text](https://latex.codecogs.com/gif.latex?%5Cfrac%7B1-%5Cnu%5E2_1%7D%7BE_1%7D%20%5Cll%20%5Cfrac%7B1-%5Cnu%5E2_2%7D%7BE_2%7D)
+The method assumes a hard indenter is used, i.e. ![](https://camo.githubusercontent.com/e3b520ba355ebf2f1b19e5a5f67c721ce07f917d/68747470733a2f2f6c617465782e636f6465636f67732e636f6d2f6769662e6c617465783f25354366726163253742312d2535436e75253545325f31253744253742455f312537442532302535436c6c25323025354366726163253742312d2535436e75253545325f32253744253742455f32253744)
 
 The default method uses as poisson ratio of 0.5 and indenter radius of 10 nm (input required in m, i.e. 10E-09). To set these manually use the 'poisson_ratio' and 'indenter_radius' inputs:
 ```
