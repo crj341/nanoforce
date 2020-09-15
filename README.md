@@ -4,20 +4,16 @@ Package to import and analyse AFM force curves produced using Nanoscope 6
 
 ## Release history:
 0.0.1 - Development
-
 0.0.2 - Packaging test
-
 0.0.3 - Initial stable release
-
 0.0.4 - Added dependenices to setup (numpy, scipy, easygui, plotly)
-
 0.0.5 - Updated README and added class/function descriptions
-
 0.0.6 - Updated README
-
 0.0.7 - Fixed issue with images in README
-
 0.0.8 - Fixed issue extracting spring constants with no decimal point
+0.0.9 - Fixed packaging error
+0.0.10 - Added support for Nanoscope version 5
+0.0.11 to 0.0.13 - Bug fixes
 
 # Python AFM Analysis Tutorial
 This tutorial demonstrates the basics of the AFM python tools for data analysis. Currently the scripts are available as an offline file or can be installed from PyPI using:

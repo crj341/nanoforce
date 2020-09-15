@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="nanoforce",
-    version="0.0.8",
+    version="0.0.13",
     author="Chris Jones",
     author_email="crj341@student.bham.ac.uk",
     description="Package to import and analyse AFM force curves produced using Nanoscope 6",
