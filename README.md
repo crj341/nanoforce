@@ -3,17 +3,23 @@
 Package to import and analyse AFM force curves produced using Nanoscope 6
 
 ## Release history:
-0.0.1 - Development
-0.0.2 - Packaging test
-0.0.3 - Initial stable release
+0.0.1 to 0.0.2 - Development
+
+0.0.3 - Initial release
+
 0.0.4 - Added dependenices to setup (numpy, scipy, easygui, plotly)
-0.0.5 - Updated README and added class/function descriptions
-0.0.6 - Updated README
-0.0.7 - Fixed issue with images in README
+
+0.0.5 to 0.0.7 - Updated README and added class/function descriptions
+
 0.0.8 - Fixed issue extracting spring constants with no decimal point
+
 0.0.9 - Fixed packaging error
+
 0.0.10 - Added support for Nanoscope version 5
-0.0.11 to 0.0.13 - Bug fixes
+
+0.0.11 to 0.1.0 - Bug fixes
+
+0.1.1 - Full release
 
 # Python AFM Analysis Tutorial
 This tutorial demonstrates the basics of the AFM python tools for data analysis. Currently the scripts are available as an offline file or can be installed from PyPI using:
@@ -24,7 +30,7 @@ Following the steps below will show you how to carry out simple analysis and plo
 https://github.com/crj341/nanoforce/blob/master/AFM_tutorial.ipynb
 
 ## Prerequisites
-To use the tools you will need a few python packages (numpy, plotly, scipy and easygui). To install these type the following commands into a terminal window (unless you have installed the nanoforce package from PyPI, in which case they should have installed automatically):
+To use the tools you will need a few python packages (numpy, plotly, scipy and easygui). To install these type the following commands into a terminal window (unless you have installed the nanoforce package from PyPI (i.e. using pip), in which case they should have installed automatically):
 ```
 pip install numpy
 pip install plotly
@@ -82,6 +88,10 @@ expt_1.nanoscope_params()
 expt_2.nanoscope_params()
 expt_3.nanoscope_params()
 ```
+By default this will search for parameters in the Nanoscope 6 format. To use a Nanoscope 5 file, change the 'nanoscope_version' input as follows (if a value other than 5 or 6 is given, or the script detects a file in the wrong format, python will exit):
+```
+expt_1.nanoscope_params(nanoscope_version=5)
+```
 If you would like to manually set the deflaction sensetivity, use the following function:
 ```
 expt_1.set_def_sens(100)
@@ -114,7 +124,7 @@ If you need to change the region used for baselining (for example, if there is n
 ```
 expt_1.baseline(start_pos = 0.5, end_pos = 0.7)
 ```
-You can also choose to exculed curves with a noisy baseline. The code calculates teh standard deviation over the specified region. If this is above a specified value the curve will be deleted. You can do this spearatley for the approach and retract curves by setting 'max_approach_noise' and 'max_retract_noise'. The default value for both is 1 and this can be changed as follows:
+You can also choose to exculed curves with a noisy baseline. The code calculates teh standard deviation over the specified region. If this is above a specified value the curve will be deleted. You can do this spearatley for the approach and retract curves by setting 'max_approach_noise' and 'max_retract_noise'. The default value for both is 1000  (i.e. all curves retained) and this can be changed as follows:
 ```
 expt_1.baseline(max_approach_noise = 2, max_retract_noise = 4)
 ```

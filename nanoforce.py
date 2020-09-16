@@ -5,7 +5,7 @@
 # Author    : Chris Jones
 # Email     : crj341@student.bham.ac.uk
 # Date      : 26/06/2020
-# Version   : 0.1
+# Version   : 0.1.1
 
 import  numpy                   as      np
 import  plotly.graph_objects    as      go
@@ -299,7 +299,7 @@ class AFM:
 
         if nanoscope_version not in [5, 6]:
             Warning('The nanoscope_version input is not set to a compatible version (5 or 6)')
-            return
+            exit()
 
         filename = self.filelist[0]
         data = open(filename,"r")
@@ -307,7 +307,7 @@ class AFM:
         nanoscope_chk = data.readline().strip()
         if not nanoscope_chk.startswith('\*Force file list'):
             Warning('Input file not nanoscope')
-            return
+            exit()
 
         if nanoscope_version == 6:
 
@@ -342,7 +342,7 @@ class AFM:
                 elif re.search('\@Sens. DeflSens:', line):
                     _def_sens = re.findall(r'\d+',line)[0] + '.' + re.findall(r'\d+',line)[1]
                     
-                elif re.search('\Spring constant:', line):
+                elif re.search('\Spring Constant:', line):
                     try:
                         _spr_const = re.findall(r'\d+',line)[0] + '.' + re.findall(r'\d+',line)[1]
                     except:
@@ -448,8 +448,8 @@ class AFM:
         self,
         start_pos = 0.45,
         end_pos = 0.8,
-        max_approach_noise = 1,
-        max_retract_noise = 1
+        max_approach_noise = 1000,
+        max_retract_noise = 1000
     ):
         '''
         Function to adjust force curve baseline to zero by taking the mean value
@@ -460,7 +460,7 @@ class AFM:
         may be removed by specifying a maximum standard deviation for the baseline
         region separatley for the approach and retract curves using the inputs
         'max_approach_noise' and 'max_retract_noise' respectivley. The defaults for
-        each are 1 nN.
+        each are 1000 nN (i.e. all curves retained).
         '''
         self.approach = np.zeros([self.samps_line, len(self.filelist)])
         self.retract = np.zeros([self.samps_line, len(self.filelist)])
