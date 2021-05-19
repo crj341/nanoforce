@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="nanoforce",
-    version="0.1.1",
+    version="0.3.0",
     author="Chris Jones",
     author_email="crj341@student.bham.ac.uk",
     description="Package to import and analyse AFM force curves produced using Nanoscope 6",
@@ -18,6 +18,7 @@ setuptools.setup(
           'plotly',
           'scipy',
           'easygui',
+          'NSFopen'
       ],
     classifiers=[
         "Programming Language :: Python :: 3",

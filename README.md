@@ -1,25 +1,6 @@
 # Nanoforce
 
-Package to import and analyse AFM force curves produced using Nanoscope 6
-
-## Release history:
-0.0.1 to 0.0.2 - Development
-
-0.0.3 - Initial release
-
-0.0.4 - Added dependenices to setup (numpy, scipy, easygui, plotly)
-
-0.0.5 to 0.0.7 - Updated README and added class/function descriptions
-
-0.0.8 - Fixed issue extracting spring constants with no decimal point
-
-0.0.9 - Fixed packaging error
-
-0.0.10 - Added support for Nanoscope version 5
-
-0.0.11 to 0.1.0 - Bug fixes
-
-0.1.1 - Full release
+Package to import and analyse AFM force curves produced using Nanoscope 5 & 6 and Nanosurf .nid files
 
 # Python AFM Analysis Tutorial
 This tutorial demonstrates the basics of the AFM python tools for data analysis. Currently the scripts are available as an offline file or can be installed from PyPI using:
@@ -59,8 +40,8 @@ expt_1 = AFM()
 expt_2 = AFM()
 expt_3 = AFM()
 ```
-## Importing data
-To import a dataset use the 'input_files' command for each experiment:
+## Importing data - Nanoscope files (.000)
+To import a nanoscope dataset use the 'input_files' command for each experiment:
 
 Note - the GUI for selecting a file will only run on a local version of python (not in the Colab tutorial). This will prompt an error in Colab - use manual file_name entry below.
 ```
@@ -75,12 +56,21 @@ If you would prefer to manually set the file name (useful if you are running the
 expt_1.file_name = '/insert/your/file/path/here.000'
 expt_1.input_files(gui_on = False)
 ```
+## Importing data - Nanoscope files (.000)
+To import a Nanosurf .nid dataset first set the file name:
+```
+expt_1.file_name = r'C:\file\path\goes\here.nid
+```
+Then call the following function to import all force curve data from the file@
+```
+epxt_1.nanosurf_import
+```
 ## Naming experiments
 It may be useful to name each experiment, for plotting etc. To do so, use the following command:
 ```
 expt_1.set_run_name('Sample 1')
 ```
-## Finding nanoscope parameters
+## Finding parameters - Nanoscope files only
 
 The next step is to import the relevant parameters from the file (such as deflection sensetivity and spring constant). To do so, due the 'nanoscope_params' function as follows:
 ```
@@ -100,7 +90,7 @@ If you would like to manually set the spring constant, use the following functio
 ```
 expt_2.set_spr_const(0.32)
 ```
-## Reading force curve data
+## Reading force curve data - Nanoscope files only
 Now we have the parameters, we need the actual data. To import this, use the 'nanoscope_read' command:
 ```
 expt_1.nanoscope_read()
@@ -144,6 +134,10 @@ expt_1.contact()
 expt_2.contact()
 expt_3.contact()
 ```
+By default, the length position used will be the piezo position, rather than the actual tip position. If a cantilever is likley to experience large deflection when in contact with the surface, the tip position can be calculated using the measured force and deflection sensitivity by calling the 'adjust_tip_position' function.
+```
+expt_1.adjust_tip_position()
+```
 ## Plot adjusted curves
 
 To view individual curves once they have been aligned, use the 'plot_adjusted' command, typing the number of the curve to plot in the brackets:
@@ -180,7 +174,7 @@ expt_1.calc_modulus()
 expt_2.calc_modulus()
 expt_3.calc_modulus()
 ```
-The method use currently follows the Hertz model for a spherical indenter:
+The method used currently follows the Hertz model for a spherical indenter:
 
 ![](https://camo.githubusercontent.com/e4f11366d77786e0d6a533f4ee99ff57343515ba/68747470733a2f2f6c617465782e636f6465636f67732e636f6d2f6769662e6c617465783f46253230253344253230253543667261632537423425374425374233253744253230452535452a25323052253545253742302e3525374425323064253545253742312e35253744)
 
@@ -206,14 +200,28 @@ Where:
 
 The method assumes a hard indenter is used, i.e. ![](https://camo.githubusercontent.com/e3b520ba355ebf2f1b19e5a5f67c721ce07f917d/68747470733a2f2f6c617465782e636f6465636f67732e636f6d2f6769662e6c617465783f25354366726163253742312d2535436e75253545325f31253744253742455f312537442532302535436c6c25323025354366726163253742312d2535436e75253545325f32253744253742455f32253744)
 
-The default method uses as poisson ratio of 0.5 and indenter radius of 10 nm (input required in m, i.e. 10E-09). To set these manually use the 'poisson_ratio' and 'indenter_radius' inputs:
+If a soft indenter, such as a colloidal probe, is used the 'soft_indenter' input should be set to 'True' and the Poisson Ratio and Elastic Modulus (MPa) of the indenter set using the         'indenter_poisson_ratio' and 'indenter_modulus' inputs respectivley.
 ```
-expt_1.calc_modulus(poisson_ratio = 0.4, indenter_radius = 20 * 10e-9)
+expt_1.calc_modulus(poisson_ratio = 0.5, indenter_radius = 10 * 1e-9, soft_indenter = True, indenter_poisson_ratio = 0.5, indenter_modulus = 300)
+```
+
+The default method uses as surface poisson ratio of 0.5 and indenter radius of 10 nm (input required in m, i.e. 10E-09). To set these manually use the 'poisson_ratio' and 'indenter_radius' inputs:
+```
+expt_1.calc_modulus(poisson_ratio = 0.4, indenter_radius = 20e-9)
 ```
 As with adhesion, it is possible to plot a histogram of the results:
 ```
 expt_2.calc_modulus(plot_hist = True)
 ```
+It is also possible to use the Sneddon model:
+```
+expt_1.calc_modulus_sneddon(poisson_ratio = 0.5, opening_angle = 35)
+```
+Or the four sided pyramid model:
+```
+expt_1.calc_modulus_pyramid(poisson_ratio = 0.5, face_angle = 35)
+```
+
 ## Plot adhesion vs modulus
 
 To view a scatter plot of adhesion vs modulus use the following command:
@@ -221,7 +229,7 @@ To view a scatter plot of adhesion vs modulus use the following command:
 expt_1.plot_adhesion_modulus()
 ```
 ## Saving and reloading results
-To save the calculate results, including force curves and parameters, use 'save_data'. This will open a window prompting you to select a folder and file name for saving. Leave the file extension blank.
+To save the calculated results, including force curves and parameters, in a format which can be re imported by the 'nanoforce' package later on use 'save_data'. This will open a window prompting you to select a folder and file name for saving. Leave the file extension blank.
 ```
 expt_1.save_data()
 ```
@@ -235,6 +243,11 @@ To load saved data, create a new variable with the AFM class and call the 'load_
 from  afm   import  AFM
 loaded_data = AFM()
 loaded_data.load_data()
+```
+It is also possible to save individual variables for use in other softwares. This can be done using the numpy 'savetxt' function, as follows for adhesion (a full list of available variables can be found in the 'Custom plotting and analysis' section below):
+```
+import numpy as np
+np.savetxt('file_name_here.csv', expt_1.adheision)
 ```
 ## Built in comparison plots
 
@@ -321,3 +334,50 @@ https://github.com/crj341/nanoforce/blob/master/afm_analysis.py
 
 A script is also available here to apply a clustering algorithm to identify groups of corresponding adhesion and modulus values, while removing noise:
 https://github.com/crj341/nanoforce/blob/master/afm_clustering.py
+
+## Release history:
+0.0.1 to 0.0.2 - Development
+
+0.0.3 - Initial release
+
+0.0.4 - Added dependenices to setup (numpy, scipy, easygui, plotly)
+
+0.0.5 to 0.0.7 - Updated README and added class/function descriptions
+
+0.0.8 - Fixed issue extracting spring constants with no decimal point
+
+0.0.9 - Fixed packaging error
+
+0.0.10 - Added support for Nanoscope version 5
+
+0.0.11 to 0.1.0 - Bug fixes
+
+0.1.1 - Full release
+
+0.1.2 to 0.1.5 - Updated 'delete_curves' numbering system, added warning for bad curves in 'contact'
+
+0.1.6 to 0.1.7 - Added support for files not starting at 000
+
+0.1.8 - Added mac support
+
+0.1.9 - Added violin plots for adhesion and modulus
+
+0.1.10 - Fixed units issue for modulus calculaiton
+
+0.1.11 - Added option to calculate actual tip position in 'nanoscope read'. Added option to include indenter Poisson Ratio and Moudlus in calc_modulus.
+
+0.1.12 to - 0.1.24 - Fixed bugs
+
+0.2.0 - New features now stable. Updated README.
+
+0.2.1 to 0.2.19 - Initial support for Nanosurf AFM .nid files.
+
+0.2.20 to 0.2.21 - Added Sneddon model and Four sided pyramid for modulus calculation.
+
+0.2.22 - Fixed bug determining points per force curve.
+
+0.2.23 - Fixed bug where adhesion was calculated as nan.
+
+0.2.24 - Updated Readme for Nanosurf .nid files.
+
+0.3.0 - New features now stable. Updated README.
